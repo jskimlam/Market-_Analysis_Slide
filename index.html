@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Daily Market Briefing · LAM</title>
+<title>Market Information Slide · LAM</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Montserrat:wght@700;900&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-/* ── CSS 변수 ─────────────────────────────── */
 :root {
   --orange: #FF8C00;
   --red:    #D93025;
@@ -16,7 +15,6 @@
   --gray1:  #1A1A1A;
   --gray2:  #444444;
   --gray3:  #888888;
-  --gray4:  #CCCCCC;
   --border: 2px solid var(--black);
   --shadow: 4px 4px 0px var(--black);
   --mono:   'DM Mono', monospace;
@@ -24,7 +22,6 @@
   --sans:   'Noto Sans KR', sans-serif;
 }
 
-/* ── 리셋 ─────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
 body {
@@ -37,60 +34,60 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── 헤더 ─────────────────────────────────── */
+/* ── 헤더: 좌(배지) | 중(타이틀 크게) | 우(드롭다운) ── */
 .hdr {
   background: var(--white);
   border-bottom: var(--border);
   padding: 0 24px;
-  height: 56px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 20px;
   position: sticky;
   top: 0;
   z-index: 100;
   flex-shrink: 0;
 }
 
-.hdr-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-}
+.hdr-left { display: flex; align-items: center; flex-shrink: 0; }
 
 .brand-badge {
   background: var(--orange);
   border: var(--border);
   box-shadow: var(--shadow);
   font-family: var(--disp);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 900;
-  padding: 4px 10px;
+  padding: 5px 14px;
   letter-spacing: 1px;
 }
 
+/* 타이틀 가운데 크게 */
+.hdr-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .brand-title {
   font-family: var(--disp);
-  font-size: 15px;
+  font-size: 24px;
   font-weight: 900;
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
   white-space: nowrap;
 }
-
 .brand-title span { color: var(--red); }
 
-/* ── 컨트롤 영역 ──────────────────────────── */
-.controls {
+/* 오른쪽: 날짜 + 분류 드롭다운 */
+.hdr-right {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex: 1;
-  justify-content: center;
+  flex-shrink: 0;
 }
 
-/* 날짜 드롭다운 */
+/* 드롭다운 공통 */
 .sel-wrap { position: relative; }
 .sel-wrap select {
   appearance: none;
@@ -101,71 +98,42 @@ body {
   font-family: var(--mono);
   font-size: 13px;
   font-weight: 700;
-  padding: 7px 36px 7px 14px;
+  padding: 7px 32px 7px 12px;
   cursor: pointer;
   outline: none;
-  min-width: 130px;
+  min-width: 120px;
   transition: box-shadow .1s;
 }
 .sel-wrap select:focus { box-shadow: 6px 6px 0px var(--black); }
 .sel-wrap::after {
   content: '▼';
   position: absolute;
-  right: 12px;
-  top: 50%;
+  right: 10px; top: 50%;
   transform: translateY(-50%);
   font-size: 9px;
   pointer-events: none;
 }
 
-/* 라벨 탭 버튼들 */
-.label-tabs {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-.label-btn {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 700;
-  padding: 6px 14px;
-  border: var(--border);
-  background: var(--white);
-  cursor: pointer;
-  transition: all .1s;
-  white-space: nowrap;
-}
-.label-btn:hover { background: var(--bg); }
-.label-btn.active {
-  background: var(--black);
-  color: var(--white);
-  box-shadow: var(--shadow);
-}
-
-/* 보안 문구 */
 .security {
   font-family: var(--mono);
   font-size: 10px;
   font-weight: 700;
   color: var(--red);
   white-space: nowrap;
-  flex-shrink: 0;
   border: 1px solid var(--red);
   padding: 3px 8px;
-  letter-spacing: 0.3px;
 }
 
-/* ── 슬라이드 메인 영역 ───────────────────── */
+/* ── 슬라이드 영역 ───────────────────────── */
 .slide-wrap {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 20px 24px 16px;
-  gap: 14px;
+  padding: 16px 24px 12px;
+  gap: 12px;
   min-height: 0;
 }
 
-/* 슬라이드 프레임 */
 .slide-frame {
   flex: 1;
   position: relative;
@@ -174,11 +142,9 @@ body {
   box-shadow: var(--shadow);
   overflow: hidden;
   min-height: 0;
-  /* 터치 스와이프 감지 영역 */
   touch-action: pan-y;
 }
 
-/* 슬라이드 트랙 (이미지들을 가로로 나열) */
 .slide-track {
   display: flex;
   height: 100%;
@@ -186,7 +152,6 @@ body {
   will-change: transform;
 }
 
-/* 개별 슬라이드 */
 .slide-item {
   flex-shrink: 0;
   width: 100%;
@@ -197,495 +162,300 @@ body {
   background: var(--white);
   padding: 8px;
 }
-
 .slide-item img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  display: block;
-  user-select: none;
-  -webkit-user-drag: none;
+  max-width: 100%; max-height: 100%;
+  object-fit: contain; display: block;
+  user-select: none; -webkit-user-drag: none;
 }
 
-/* 좌우 화살표 버튼 */
-.arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: var(--white);
-  border: var(--border);
-  box-shadow: var(--shadow);
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 20px;
-  font-weight: 900;
-  z-index: 10;
-  transition: all .1s;
-  user-select: none;
-}
-.arrow:hover { background: var(--orange); }
-.arrow:active { box-shadow: 2px 2px 0px var(--black); transform: translateY(calc(-50% + 2px)) translateX(2px); }
-.arrow.left  { left: 12px; }
-.arrow.right { right: 12px; }
-.arrow.hidden { opacity: 0; pointer-events: none; }
-
-/* 페이지 없을 때 빈 화면 */
 .empty-state {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  color: var(--gray3);
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px; color: var(--gray3);
 }
 .empty-state .big { font-size: 48px; }
 .empty-state .msg { font-family: var(--mono); font-size: 14px; }
 
-/* ── 하단 컨트롤 바 ────────────────────────── */
+/* ── 하단 컨트롤: 화살표를 이미지 밖 하단에 ── */
 .slide-footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 14px;
   flex-shrink: 0;
 }
 
-/* Dot 인디케이터 */
-.dots {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+/* 화살표 버튼 - 프레임 밖 하단 배치 */
+.arrow {
+  background: var(--white);
+  border: var(--border);
+  box-shadow: var(--shadow);
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 22px; font-weight: 900;
+  transition: all .1s;
+  user-select: none; flex-shrink: 0;
 }
+.arrow:hover  { background: var(--orange); }
+.arrow:active { box-shadow: 2px 2px 0 var(--black); transform: translate(2px,2px); }
+.arrow.hidden { opacity: 0; pointer-events: none; }
+
+.dots { display: flex; gap: 8px; align-items: center; }
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 10px; height: 10px;
   border: 2px solid var(--black);
   background: var(--white);
-  cursor: pointer;
-  transition: all .15s;
+  cursor: pointer; transition: all .15s; flex-shrink: 0;
 }
-.dot.active {
-  background: var(--black);
-  width: 28px;
-}
+.dot.active { background: var(--black); width: 28px; }
 
-/* 페이지 카운터 */
 .page-counter {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 700;
-  min-width: 60px;
-  text-align: center;
-  color: var(--gray2);
+  font-family: var(--mono); font-size: 13px; font-weight: 700;
+  min-width: 52px; text-align: center; color: var(--gray2);
 }
 
-/* 소스 표기 */
-.source {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--gray3);
-  font-style: italic;
-}
+.source { font-family: var(--mono); font-size: 10px; color: var(--gray3); font-style: italic; }
 
 /* ── 푸터 ─────────────────────────────────── */
 .ftr {
-  border-top: var(--border);
-  background: var(--white);
-  padding: 10px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
+  border-top: var(--border); background: var(--white);
+  padding: 10px 24px; display: flex;
+  align-items: center; justify-content: space-between; flex-shrink: 0;
 }
-.ftr-left {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 700;
-}
-.ftr-right {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--gray3);
-}
+.ftr-left { font-family: var(--mono); font-size: 11px; font-weight: 700; }
+.ftr-right { font-family: var(--mono); font-size: 10px; color: var(--gray3); }
 
-/* ── 로딩 오버레이 ─────────────────────────── */
+/* ── 로딩 ─────────────────────────────────── */
 #loading {
-  position: fixed;
-  inset: 0;
-  background: rgba(255,255,255,0.85);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  font-family: var(--mono);
-  font-size: 14px;
-  font-weight: 700;
-  gap: 10px;
+  position: fixed; inset: 0; background: rgba(255,255,255,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999; font-family: var(--mono); font-size: 14px; font-weight: 700; gap: 10px;
 }
 #loading.hidden { display: none; }
 .spin {
   width: 20px; height: 20px;
-  border: 3px solid var(--black);
-  border-top-color: var(--orange);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
+  border: 3px solid var(--black); border-top-color: var(--orange);
+  border-radius: 50%; animation: spin .7s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── 반응형: 모바일 ────────────────────────── */
+/* ── 모바일 ────────────────────────────────── */
 @media (max-width: 600px) {
-  .hdr {
-    height: auto;
-    flex-wrap: wrap;
-    padding: 12px 14px;
-    gap: 10px;
-  }
-  .brand-title { font-size: 13px; }
+  .hdr { height: auto; flex-wrap: wrap; padding: 10px 14px; gap: 8px; }
+  .hdr-center { order: -1; width: 100%; }
+  .brand-title { font-size: 16px; }
   .security { display: none; }
-  .controls {
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 8px;
-  }
-  .label-tabs { flex-wrap: wrap; }
-  .slide-wrap { padding: 12px 12px 10px; }
-  .arrow { width: 36px; height: 36px; font-size: 16px; }
-  .arrow.left  { left: 6px; }
-  .arrow.right { right: 6px; }
+  .slide-wrap { padding: 10px 10px 8px; }
+  .arrow { width: 34px; height: 34px; font-size: 18px; }
   .ftr { flex-direction: column; gap: 4px; text-align: center; }
 }
 
-/* ── 반응형: 태블릿 ────────────────────────── */
+/* ── 태블릿 ────────────────────────────────── */
 @media (min-width: 601px) and (max-width: 1024px) {
   .hdr { height: auto; flex-wrap: wrap; padding: 10px 16px; }
-  .controls { width: 100%; }
+  .brand-title { font-size: 18px; }
+  .hdr-right { flex-wrap: wrap; }
 }
 </style>
 </head>
 <body>
 
-<!-- 로딩 오버레이 -->
 <div id="loading"><div class="spin"></div>데이터 로딩 중...</div>
 
-<!-- ── 헤더 ────────────────────────────────── -->
 <header class="hdr">
-  <div class="hdr-brand">
+  <div class="hdr-left">
     <div class="brand-badge">LAM</div>
-    <div class="brand-title">Market <span> Information</span> Slide</div>
   </div>
-
-  <div class="controls">
-    <!-- 날짜 드롭다운 -->
+  <div class="hdr-center">
+    <div class="brand-title">Market <span>Information</span> Slide</div>
+  </div>
+  <div class="hdr-right">
     <div class="sel-wrap">
       <select id="dateSelect" onchange="onDateChange(this.value)">
         <option value="">날짜 선택</option>
       </select>
     </div>
-
-    <!-- 라벨(이름) 탭 -->
-    <div class="label-tabs" id="labelTabs"></div>
+    <!-- 라벨 탭 → 드롭다운으로 변경 (파일 종류 무한 추가해도 UI 깨지지 않음) -->
+    <div class="sel-wrap">
+      <select id="labelSelect" onchange="selectLabel(this.value)">
+        <option value="">분류 선택</option>
+      </select>
+    </div>
+    <div class="security">보안 · 복제배포 금지</div>
   </div>
-
-  <div class="security">사내 보안 · 복제배포 금지</div>
 </header>
 
-<!-- ── 슬라이드 영역 ────────────────────────── -->
 <div class="slide-wrap">
-
   <div class="slide-frame" id="slideFrame">
-    <!-- 슬라이드 트랙 (JS로 채워짐) -->
     <div class="slide-track" id="slideTrack"></div>
-
-    <!-- 빈 상태 -->
     <div class="empty-state" id="emptyState">
       <div class="big">📂</div>
-      <div class="msg">날짜와 품목을 선택하세요</div>
+      <div class="msg">날짜와 분류를 선택하세요</div>
     </div>
-
-    <!-- 좌우 화살표 -->
-    <div class="arrow left hidden" id="arrowLeft" onclick="movePage(-1)">&#8249;</div>
-    <div class="arrow right hidden" id="arrowRight" onclick="movePage(1)">&#8250;</div>
   </div>
 
-  <!-- 하단 인디케이터 -->
+  <!-- 화살표 이미지 밖 하단 배치 -->
   <div class="slide-footer">
+    <div class="arrow hidden" id="arrowLeft"  onclick="movePage(-1)">&#8249;</div>
     <div class="dots" id="dots"></div>
     <div class="page-counter" id="pageCounter"></div>
+    <div class="arrow hidden" id="arrowRight" onclick="movePage(1)">&#8250;</div>
     <div class="source">Source: Platts / ICIS (AI Summarized)</div>
   </div>
-
 </div>
 
-<!-- ── 푸터 ─────────────────────────────────── -->
 <footer class="ftr">
   <div class="ftr-left">Created by JS Kim of LAM (첨단구매1팀)</div>
   <div class="ftr-right">© 2026 Lotte Chemical Advanced Materials</div>
 </footer>
 
-<!-- ── JavaScript ─────────────────────────── -->
 <script>
-// ── 상태 변수 ────────────────────────────────
-let listData   = {};   // { "260206": { "SM": ["파일1","파일2"], ... }, ... }
-let curDate    = '';   // 현재 선택된 날짜
-let curLabel   = '';   // 현재 선택된 라벨
-let curPage    = 0;    // 현재 슬라이드 인덱스 (0-based)
-let curImages  = [];   // 현재 표시 중인 이미지 파일명 배열
-let isDragging = false;
-let startX     = 0;
-let diffX      = 0;
+let listData={}, curDate='', curLabel='', curPage=0, curImages=[];
+let isDragging=false, startX=0, diffX=0;
 
-// ── 초기화: list.json 로드 ───────────────────
 async function init() {
   try {
-    const res  = await fetch('images/list.json?t=' + Date.now());
+    const res = await fetch('images/list.json?t=' + Date.now());
     if (!res.ok) throw new Error('list.json 로드 실패');
     listData = await res.json();
     buildDateSelect();
-    // 가장 최신 날짜 자동 선택
     const dates = Object.keys(listData);
-    if (dates.length > 0) {
-      onDateChange(dates[0]);
-      document.getElementById('dateSelect').value = dates[0];
-    }
-  } catch (e) {
-    console.error(e);
-    showEmpty('list.json을 찾을 수 없습니다');
-  } finally {
-    document.getElementById('loading').classList.add('hidden');
-  }
+    if (dates.length > 0) { onDateChange(dates[0]); document.getElementById('dateSelect').value = dates[0]; }
+  } catch(e) { console.error(e); showEmpty('list.json을 찾을 수 없습니다'); }
+  finally { document.getElementById('loading').classList.add('hidden'); }
 }
 
-// ── 날짜 드롭다운 빌드 ──────────────────────
 function buildDateSelect() {
   const sel = document.getElementById('dateSelect');
-  // 기존 옵션 초기화 (첫 번째 placeholder 제외)
   sel.innerHTML = '<option value="">날짜 선택</option>';
-  Object.keys(listData).forEach(date => {
-    const opt = document.createElement('option');
-    opt.value = date;
-    // YYMMDD → YY/MM/DD 포맷으로 보기 좋게
-    opt.textContent = formatDate(date);
-    sel.appendChild(opt);
+  Object.keys(listData).forEach(d => {
+    const o = document.createElement('option');
+    o.value = d; o.textContent = formatDate(d); sel.appendChild(o);
   });
 }
 
-// ── 날짜 선택 이벤트 ─────────────────────────
 function onDateChange(date) {
   if (!date || !listData[date]) return;
   curDate = date;
-  // 해당 날짜의 라벨 목록으로 탭 빌드
-  buildLabelTabs(Object.keys(listData[date]));
-  // 첫 번째 라벨 자동 선택
+  buildLabelSelect(Object.keys(listData[date]));
   const labels = Object.keys(listData[date]);
-  if (labels.length > 0) selectLabel(labels[0]);
+  if (labels.length > 0) { document.getElementById('labelSelect').value = labels[0]; selectLabel(labels[0]); }
 }
 
-// ── 라벨 탭 빌드 ─────────────────────────────
-function buildLabelTabs(labels) {
-  const container = document.getElementById('labelTabs');
-  container.innerHTML = '';
-  labels.forEach(label => {
-    const btn = document.createElement('button');
-    btn.className = 'label-btn';
-    btn.textContent = label;
-    btn.onclick = () => selectLabel(label);
-    container.appendChild(btn);
-  });
+// 라벨 드롭다운: 파일 이름 몇 개든 UI 깨지지 않음
+function buildLabelSelect(labels) {
+  const sel = document.getElementById('labelSelect');
+  sel.innerHTML = '<option value="">분류 선택</option>';
+  labels.forEach(l => { const o = document.createElement('option'); o.value = l; o.textContent = l; sel.appendChild(o); });
 }
 
-// ── 라벨 선택 ────────────────────────────────
 function selectLabel(label) {
-  curLabel = label;
-  curPage  = 0;
-
-  // 탭 활성화 표시
-  document.querySelectorAll('.label-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent === label);
-  });
-
-  // 이미지 목록 가져오기
+  if (!label) return;
+  curLabel = label; curPage = 0;
   curImages = (listData[curDate] && listData[curDate][label]) || [];
   renderSlides();
 }
 
-// ── 슬라이드 렌더 ────────────────────────────
 function renderSlides() {
-  const track   = document.getElementById('slideTrack');
-  const empty   = document.getElementById('emptyState');
-  const counter = document.getElementById('pageCounter');
-
+  const track = document.getElementById('slideTrack');
+  const empty = document.getElementById('emptyState');
   track.innerHTML = '';
-
   if (curImages.length === 0) {
-    track.style.display = 'none';
-    empty.style.display = 'flex';
+    track.style.display = 'none'; empty.style.display = 'flex';
     document.getElementById('dots').innerHTML = '';
-    counter.textContent = '';
-    updateArrows();
-    return;
+    document.getElementById('pageCounter').textContent = '';
+    updateArrows(); return;
   }
-
-  // 트랙 표시
-  track.style.display = 'flex';
-  empty.style.display = 'none';
-
-  // 슬라이드 아이템 생성
-  curImages.forEach((filename, idx) => {
-    const item = document.createElement('div');
-    item.className = 'slide-item';
-    const img = document.createElement('img');
-    img.src = `images/archive/${filename}`;
-    img.alt = `슬라이드 ${idx + 1}`;
-    img.loading = idx === 0 ? 'eager' : 'lazy';  // 첫 장은 즉시 로드
-    item.appendChild(img);
-    track.appendChild(item);
+  track.style.display = 'flex'; empty.style.display = 'none';
+  curImages.forEach((fn, idx) => {
+    const item = document.createElement('div'); item.className = 'slide-item';
+    const img  = document.createElement('img');
+    img.src = `images/archive/${fn}`; img.alt = `슬라이드 ${idx+1}`;
+    img.loading = idx === 0 ? 'eager' : 'lazy';
+    item.appendChild(img); track.appendChild(item);
   });
-
-  goToPage(0, false);  // 첫 장으로 이동 (애니메이션 없이)
-  buildDots();
+  goToPage(0, false); buildDots();
 }
 
-// ── 페이지 이동 (순환: 마지막→첫장, 첫장→마지막) ──
 function movePage(delta) {
   if (curImages.length === 0) return;
-  // 끝에서 처음으로, 처음에서 끝으로 순환
-  const next = (curPage + delta + curImages.length) % curImages.length;
-  goToPage(next, true);
+  goToPage((curPage + delta + curImages.length) % curImages.length, true);
 }
 
 function goToPage(idx, animate) {
   curPage = idx;
   const track = document.getElementById('slideTrack');
-
-  // 애니메이션 여부
-  track.style.transition = animate
-    ? 'transform 0.35s cubic-bezier(.4,0,.2,1)'
-    : 'none';
-
-  // 슬라이드 이동
-  track.style.transform = `translateX(-${idx * 100}%)`;
-
-  updateArrows();
-  updateDots();
-  updateCounter();
+  track.style.transition = animate ? 'transform 0.35s cubic-bezier(.4,0,.2,1)' : 'none';
+  track.style.transform  = `translateX(-${idx * 100}%)`;
+  updateArrows(); updateDots(); updateCounter();
 }
 
-// ── 화살표 표시 업데이트 (순환이므로 항상 표시) ──
 function updateArrows() {
-  const left  = document.getElementById('arrowLeft');
-  const right = document.getElementById('arrowRight');
-  // 이미지 없을 때만 숨김, 순환이므로 첫/마지막 구분 없이 항상 표시
-  left.classList.toggle('hidden',  curImages.length === 0);
-  right.classList.toggle('hidden', curImages.length === 0);
+  // 순환이므로 이미지 있으면 항상 표시
+  document.getElementById('arrowLeft').classList.toggle('hidden',  curImages.length === 0);
+  document.getElementById('arrowRight').classList.toggle('hidden', curImages.length === 0);
 }
 
-// ── Dot 인디케이터 ────────────────────────────
 function buildDots() {
-  const container = document.getElementById('dots');
-  container.innerHTML = '';
-  curImages.forEach((_, idx) => {
-    const dot = document.createElement('div');
-    dot.className = 'dot' + (idx === curPage ? ' active' : '');
-    dot.onclick = () => goToPage(idx, true);
-    container.appendChild(dot);
+  const c = document.getElementById('dots'); c.innerHTML = '';
+  curImages.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === curPage ? ' active' : '');
+    d.onclick = () => goToPage(i, true); c.appendChild(d);
   });
 }
-
 function updateDots() {
-  document.querySelectorAll('.dot').forEach((dot, idx) => {
-    dot.classList.toggle('active', idx === curPage);
-  });
+  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === curPage));
 }
-
-// ── 페이지 카운터 ─────────────────────────────
 function updateCounter() {
-  const el = document.getElementById('pageCounter');
-  el.textContent = curImages.length > 0
-    ? `${curPage + 1} / ${curImages.length}`
-    : '';
+  document.getElementById('pageCounter').textContent = curImages.length > 0 ? `${curPage+1} / ${curImages.length}` : '';
 }
-
-// ── 빈 상태 메시지 ────────────────────────────
 function showEmpty(msg) {
-  const empty = document.getElementById('emptyState');
-  empty.querySelector('.msg').textContent = msg;
-  empty.style.display = 'flex';
+  const e = document.getElementById('emptyState');
+  e.querySelector('.msg').textContent = msg; e.style.display = 'flex';
   document.getElementById('slideTrack').style.display = 'none';
 }
-
-// ── 날짜 포맷 (260206 → 26/02/06) ────────────
 function formatDate(d) {
-  if (d.length === 6) return `20${d.slice(0,2)}/${d.slice(2,4)}/${d.slice(4,6)}`;
-  return d;
+  return d.length === 6 ? `20${d.slice(0,2)}/${d.slice(2,4)}/${d.slice(4,6)}` : d;
 }
 
 // ── 터치 스와이프 ─────────────────────────────
 const frame = document.getElementById('slideFrame');
-
-frame.addEventListener('touchstart', e => {
-  startX = e.touches[0].clientX;
-  diffX  = 0;
-  isDragging = true;
-}, { passive: true });
-
-frame.addEventListener('touchmove', e => {
+frame.addEventListener('touchstart', e => { startX=e.touches[0].clientX; diffX=0; isDragging=true; }, {passive:true});
+frame.addEventListener('touchmove',  e => {
   if (!isDragging) return;
   diffX = e.touches[0].clientX - startX;
-  // 현재 위치에서 드래그 미리보기
-  const track = document.getElementById('slideTrack');
-  track.style.transition = 'none';
-  track.style.transform = `translateX(calc(-${curPage * 100}% + ${diffX}px))`;
-}, { passive: true });
-
+  const t = document.getElementById('slideTrack');
+  t.style.transition='none'; t.style.transform=`translateX(calc(-${curPage*100}% + ${diffX}px))`;
+}, {passive:true});
 frame.addEventListener('touchend', () => {
-  if (!isDragging) return;
-  isDragging = false;
-  const threshold = frame.offsetWidth * 0.2;  // 20% 이상 드래그 시 페이지 전환
-  if (diffX < -threshold) movePage(1);        // 왼쪽 스와이프 → 다음
-  else if (diffX > threshold) movePage(-1);   // 오른쪽 스와이프 → 이전
-  else goToPage(curPage, true);               // 복귀
+  if (!isDragging) return; isDragging=false;
+  const thr = frame.offsetWidth * 0.2;
+  if (diffX < -thr) movePage(1); else if (diffX > thr) movePage(-1); else goToPage(curPage, true);
 });
 
-// ── 마우스 드래그 (PC) ────────────────────────
-frame.addEventListener('mousedown', e => {
-  startX = e.clientX;
-  diffX  = 0;
-  isDragging = true;
-  frame.style.cursor = 'grabbing';
-});
-
+// ── 마우스 드래그 ─────────────────────────────
+frame.addEventListener('mousedown', e => { startX=e.clientX; diffX=0; isDragging=true; frame.style.cursor='grabbing'; });
 document.addEventListener('mousemove', e => {
   if (!isDragging) return;
   diffX = e.clientX - startX;
-  const track = document.getElementById('slideTrack');
-  track.style.transition = 'none';
-  track.style.transform = `translateX(calc(-${curPage * 100}% + ${diffX}px))`;
+  const t = document.getElementById('slideTrack');
+  t.style.transition='none'; t.style.transform=`translateX(calc(-${curPage*100}% + ${diffX}px))`;
 });
-
 document.addEventListener('mouseup', () => {
-  if (!isDragging) return;
-  isDragging = false;
-  frame.style.cursor = '';
-  const threshold = frame.offsetWidth * 0.15;
-  if (diffX < -threshold) movePage(1);
-  else if (diffX > threshold) movePage(-1);
-  else goToPage(curPage, true);
+  if (!isDragging) return; isDragging=false; frame.style.cursor='';
+  const thr = frame.offsetWidth * 0.15;
+  if (diffX < -thr) movePage(1); else if (diffX > thr) movePage(-1); else goToPage(curPage, true);
 });
 
-// ── 키보드 ← → ───────────────────────────────
+// ── 키보드 ───────────────────────────────────
 document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowLeft')  movePage(-1);
-  if (e.key === 'ArrowRight') movePage(1);
+  if (e.key==='ArrowLeft')  movePage(-1);
+  if (e.key==='ArrowRight') movePage(1);
 });
 
-// ── 시작 ─────────────────────────────────────
 init();
 </script>
 </body>
