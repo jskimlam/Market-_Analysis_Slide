@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Market Information Slide · LAM</title>
+<title>Daily Market Briefing · LAM</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Montserrat:wght@700;900&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 /* ── CSS 변수 ─────────────────────────────── */
@@ -378,7 +378,7 @@ body {
 <header class="hdr">
   <div class="hdr-brand">
     <div class="brand-badge">LAM</div>
-    <div class="brand-title">Daily <span>Market</span> Briefing</div>
+    <div class="brand-title">Market <span> Information</span> Slide</div>
   </div>
 
   <div class="controls">
@@ -552,10 +552,11 @@ function renderSlides() {
   buildDots();
 }
 
-// ── 페이지 이동 ──────────────────────────────
+// ── 페이지 이동 (순환: 마지막→첫장, 첫장→마지막) ──
 function movePage(delta) {
-  const next = curPage + delta;
-  if (next < 0 || next >= curImages.length) return;
+  if (curImages.length === 0) return;
+  // 끝에서 처음으로, 처음에서 끝으로 순환
+  const next = (curPage + delta + curImages.length) % curImages.length;
   goToPage(next, true);
 }
 
@@ -576,12 +577,13 @@ function goToPage(idx, animate) {
   updateCounter();
 }
 
-// ── 화살표 표시 업데이트 ─────────────────────
+// ── 화살표 표시 업데이트 (순환이므로 항상 표시) ──
 function updateArrows() {
   const left  = document.getElementById('arrowLeft');
   const right = document.getElementById('arrowRight');
-  left.classList.toggle('hidden',  curPage === 0 || curImages.length === 0);
-  right.classList.toggle('hidden', curPage >= curImages.length - 1 || curImages.length === 0);
+  // 이미지 없을 때만 숨김, 순환이므로 첫/마지막 구분 없이 항상 표시
+  left.classList.toggle('hidden',  curImages.length === 0);
+  right.classList.toggle('hidden', curImages.length === 0);
 }
 
 // ── Dot 인디케이터 ────────────────────────────
