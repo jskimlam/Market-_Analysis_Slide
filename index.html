@@ -1,522 +1,564 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Market Information Slide · LAM</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Montserrat:wght@700;900&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
-<style>
-:root {
-  --orange: #FF8C00;
-  --red:    #D93025;
-  --black:  #000000;
-  --white:  #FFFFFF;
-  --bg:     #F0F0EE;
-  --gray1:  #1A1A1A;
-  --gray2:  #444444;
-  --gray3:  #888888;
-  --border: 2px solid var(--black);
-  --shadow: 4px 4px 0px var(--black);
-  --mono:   'DM Mono', monospace;
-  --disp:   'Montserrat', sans-serif;
-  --sans:   'Noto Sans KR', sans-serif;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Market Information Slide · LAM</title>
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; }
-body {
-  font-family: var(--sans);
-  background: var(--bg);
-  color: var(--gray1);
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-}
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Montserrat:wght@700;900&family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
 
-/* ── 헤더: 좌(배지) | 중(타이틀 크게) | 우(드롭다운) ── */
-.hdr {
-  background: var(--white);
-  border-bottom: var(--border);
-  padding: 0 24px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  flex-shrink: 0;
-}
+  <style>
+    :root {
+      --orange: #FF8C00;
+      --red:    #D93025;
+      --black:  #000000;
+      --white:  #FFFFFF;
+      --bg:     #F0F0EE;
+      --gray1:  #1A1A1A;
+      --gray2:  #444444;
+      --gray3:  #888888;
+      --border: 2px solid var(--black);
+      --shadow: 4px 4px 0px var(--black);
+      --mono:   'DM Mono', monospace;
+      --disp:   'Montserrat', sans-serif;
+      --sans:   'Noto Sans KR', sans-serif;
+    }
 
-.hdr-left { display: flex; align-items: center; flex-shrink: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
 
-.brand-badge {
-  background: var(--orange);
-  border: var(--border);
-  box-shadow: var(--shadow);
-  font-family: var(--disp);
-  font-size: 14px;
-  font-weight: 900;
-  padding: 5px 14px;
-  letter-spacing: 1px;
-}
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--gray1);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
 
-/* 타이틀 가운데 크게 */
-.hdr-center {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.brand-title {
-  font-family: var(--disp);
-  font-size: 24px;
-  font-weight: 900;
-  letter-spacing: -1px;
-  white-space: nowrap;
-}
-.brand-title span { color: var(--red); }
+    .hdr {
+      background: var(--white);
+      border-bottom: var(--border);
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-shrink: 0;
+    }
 
-/* 오른쪽: 날짜 + 분류 드롭다운 */
-.hdr-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-}
+    .hdr-left {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
 
-/* 드롭다운 공통 */
-.sel-wrap { position: relative; }
-.sel-wrap select {
-  appearance: none;
-  -webkit-appearance: none;
-  background: var(--white);
-  border: var(--border);
-  box-shadow: var(--shadow);
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 700;
-  padding: 7px 32px 7px 12px;
-  cursor: pointer;
-  outline: none;
-  min-width: 120px;
-  transition: box-shadow .1s;
-}
-.sel-wrap select:focus { box-shadow: 6px 6px 0px var(--black); }
-.sel-wrap::after {
-  content: '▼';
-  position: absolute;
-  right: 10px; top: 50%;
-  transform: translateY(-50%);
-  font-size: 9px;
-  pointer-events: none;
-}
+    .brand-badge {
+      background: var(--orange);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      font-family: var(--disp);
+      font-size: 14px;
+      font-weight: 900;
+      padding: 5px 14px;
+      letter-spacing: 1px;
+    }
 
-.security {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--red);
-  white-space: nowrap;
-  border: 1px solid var(--red);
-  padding: 3px 8px;
-}
+    .hdr-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-/* ── 슬라이드 영역 ───────────────────────── */
-.slide-wrap {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 16px 24px 12px;
-  gap: 12px;
-  min-height: 0;
-}
+    .brand-title {
+      font-family: var(--disp);
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      white-space: nowrap;
+    }
 
-.slide-frame {
-  flex: 1;
-  position: relative;
-  background: var(--white);
-  border: var(--border);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  min-height: 0;
-  touch-action: pan-y;
-}
+    .brand-title span {
+      color: var(--red);
+    }
 
-.slide-track {
-  display: flex;
-  height: 100%;
-  transition: transform 0.35s cubic-bezier(.4,0,.2,1);
-  will-change: transform;
-}
+    .hdr-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
 
-.slide-item {
-  flex-shrink: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--white);
-  padding: 8px;
-}
-.slide-item img {
-  max-width: 100%; max-height: 100%;
-  object-fit: contain; display: block;
-  user-select: none; -webkit-user-drag: none;
-}
+    .sel-wrap {
+      position: relative;
+    }
 
-.empty-state {
-  width: 100%; height: 100%;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 12px; color: var(--gray3);
-}
-.empty-state .big { font-size: 48px; }
-.empty-state .msg { font-family: var(--mono); font-size: 14px; }
+    .sel-wrap select {
+      appearance: none;
+      -webkit-appearance: none;
+      background: var(--white);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 7px 32px 7px 12px;
+      cursor: pointer;
+      outline: none;
+      min-width: 120px;
+      transition: box-shadow .1s;
+    }
 
-/* ── 하단 컨트롤: 화살표를 이미지 밖 하단에 ── */
-.slide-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  flex-shrink: 0;
-}
+    .sel-wrap select:focus {
+      box-shadow: 6px 6px 0px var(--black);
+    }
 
-/* 화살표 버튼 - 프레임 밖 하단 배치 */
-.arrow {
-  background: var(--white);
-  border: var(--border);
-  box-shadow: var(--shadow);
-  width: 40px; height: 40px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  font-size: 22px; font-weight: 900;
-  transition: all .1s;
-  user-select: none; flex-shrink: 0;
-}
-.arrow:hover  { background: var(--orange); }
-.arrow:active { box-shadow: 2px 2px 0 var(--black); transform: translate(2px,2px); }
-.arrow.hidden { opacity: 0; pointer-events: none; }
+    .sel-wrap::after {
+      content: '▼';
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 9px;
+      pointer-events: none;
+    }
 
-.dots { display: flex; gap: 8px; align-items: center; }
-.dot {
-  width: 10px; height: 10px;
-  border: 2px solid var(--black);
-  background: var(--white);
-  cursor: pointer; transition: all .15s; flex-shrink: 0;
-}
-.dot.active { background: var(--black); width: 28px; }
+    .security {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--red);
+      white-space: nowrap;
+      border: 1px solid var(--red);
+      padding: 3px 8px;
+    }
 
-.page-counter {
-  font-family: var(--mono); font-size: 13px; font-weight: 700;
-  min-width: 52px; text-align: center; color: var(--gray2);
-}
+    .main-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 24px 12px;
+      gap: 12px;
+      min-height: 0;
+    }
 
-.source { font-family: var(--mono); font-size: 10px; color: var(--gray3); font-style: italic; }
+    .viewer-frame {
+      flex: 1;
+      position: relative;
+      background: var(--white);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-height: 0;
+    }
 
-/* ── 푸터 ─────────────────────────────────── */
-.ftr {
-  border-top: var(--border); background: var(--white);
-  padding: 10px 24px; display: flex;
-  align-items: center; justify-content: space-between; flex-shrink: 0;
-}
-.ftr-left { font-family: var(--mono); font-size: 11px; font-weight: 700; }
-.ftr-right { font-family: var(--mono); font-size: 10px; color: var(--gray3); }
+    .pdf-viewer {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: none;
+      background: #f7f7f7;
+    }
 
-/* ── 로딩 ─────────────────────────────────── */
-#loading {
-  position: fixed; inset: 0; background: rgba(255,255,255,0.85);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 9999; font-family: var(--mono); font-size: 14px; font-weight: 700; gap: 10px;
-}
-#loading.hidden { display: none; }
-.spin {
-  width: 20px; height: 20px;
-  border: 3px solid var(--black); border-top-color: var(--orange);
-  border-radius: 50%; animation: spin .7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+    .empty-state {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--gray3);
+      text-align: center;
+      padding: 20px;
+    }
 
-/* ── 모바일 ────────────────────────────────── */
-@media (max-width: 600px) {
-  .hdr { height: auto; flex-wrap: wrap; padding: 10px 14px; gap: 8px; }
-  .hdr-center { order: -1; width: 100%; }
-  .brand-title { font-size: 16px; }
-  .security { display: none; }
-  .slide-wrap { padding: 10px 10px 8px; }
-  .arrow { width: 34px; height: 34px; font-size: 18px; }
-  .ftr { flex-direction: column; gap: 4px; text-align: center; }
-}
+    .empty-state .big {
+      font-size: 48px;
+    }
 
-/* ── 태블릿 ────────────────────────────────── */
-@media (min-width: 601px) and (max-width: 1024px) {
-  .hdr { height: auto; flex-wrap: wrap; padding: 10px 16px; }
-  .brand-title { font-size: 18px; }
-  .hdr-right { flex-wrap: wrap; }
-}
-</style>
+    .empty-state .msg {
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-left, .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: var(--white);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 12px;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--black);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+    }
+
+    .btn:hover {
+      background: var(--orange);
+    }
+
+    .btn:active {
+      box-shadow: 2px 2px 0 var(--black);
+      transform: translate(2px, 2px);
+    }
+
+    .btn.disabled {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .file-name {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--gray2);
+      word-break: break-all;
+    }
+
+    .source {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--gray3);
+      font-style: italic;
+    }
+
+    .ftr {
+      border-top: var(--border);
+      background: var(--white);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .ftr-left {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .ftr-right {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--gray3);
+    }
+
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 700;
+      gap: 10px;
+    }
+
+    #loading.hidden {
+      display: none;
+    }
+
+    .spin {
+      width: 20px;
+      height: 20px;
+      border: 3px solid var(--black);
+      border-top-color: var(--orange);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .hdr {
+        height: auto;
+        flex-wrap: wrap;
+        padding: 10px 14px;
+        gap: 8px;
+      }
+
+      .hdr-center {
+        order: -1;
+        width: 100%;
+      }
+
+      .brand-title {
+        font-size: 16px;
+      }
+
+      .security {
+        display: none;
+      }
+
+      .main-wrap {
+        padding: 10px 10px 8px;
+      }
+
+      .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .toolbar-left, .toolbar-right {
+        justify-content: center;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .ftr {
+        flex-direction: column;
+        gap: 4px;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div id="loading"><div class="spin"></div>데이터 로딩 중...</div>
+  <div id="loading">
+    <div class="spin"></div>
+    데이터 로딩 중...
+  </div>
 
-<header class="hdr">
-  <div class="hdr-left">
-    <div class="brand-badge">LAM</div>
-  </div>
-  <div class="hdr-center">
-    <div class="brand-title">Market <span>Information</span> Slide</div>
-  </div>
-  <div class="hdr-right">
-    <div class="sel-wrap">
-      <select id="dateSelect" onchange="onDateChange(this.value)">
-        <option value="">날짜 선택</option>
-      </select>
+  <header class="hdr">
+    <div class="hdr-left">
+      <div class="brand-badge">LAM</div>
     </div>
-    <!-- 라벨 탭 → 드롭다운으로 변경 (파일 종류 무한 추가해도 UI 깨지지 않음) -->
-    <div class="sel-wrap">
-      <select id="labelSelect" onchange="selectLabel(this.value)">
-        <option value="">분류 선택</option>
-      </select>
+
+    <div class="hdr-center">
+      <div class="brand-title">Market <span>Information</span> Slide</div>
     </div>
-    <div class="security">보안 · 복제배포 금지</div>
-  </div>
-</header>
 
-<div class="slide-wrap">
-  <div class="slide-frame" id="slideFrame">
-    <div class="slide-track" id="slideTrack"></div>
-    <div class="empty-state" id="emptyState">
-      <div class="big">📂</div>
-      <div class="msg">날짜와 분류를 선택하세요</div>
+    <div class="hdr-right">
+      <div class="sel-wrap">
+        <select id="dateSelect" onchange="onDateChange(this.value)">
+          <option value="">날짜 선택</option>
+        </select>
+      </div>
+
+      <div class="sel-wrap">
+        <select id="labelSelect" onchange="selectLabel(this.value)">
+          <option value="">분류 선택</option>
+        </select>
+      </div>
+
+      <div class="security">보안 · 복제배포 금지</div>
+    </div>
+  </header>
+
+  <div class="main-wrap">
+    <div class="viewer-frame">
+      <iframe id="pdfViewer" class="pdf-viewer"></iframe>
+
+      <div class="empty-state" id="emptyState">
+        <div class="big">📄</div>
+        <div class="msg">날짜와 분류를 선택하면 PDF가 표시됩니다</div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <a id="openBtn" class="btn disabled" href="#" target="_blank" rel="noopener noreferrer">새 창에서 열기</a>
+        <a id="downloadBtn" class="btn disabled" href="#" target="_blank" rel="noopener noreferrer">PDF 열기</a>
+      </div>
+
+      <div class="toolbar-right">
+        <div class="file-name" id="fileName">선택된 파일 없음</div>
+        <div class="source">Source: PDF Archive</div>
+      </div>
     </div>
   </div>
 
-  <!-- 화살표 이미지 밖 하단 배치 -->
-  <div class="slide-footer">
-    <div class="arrow hidden" id="arrowLeft"  onclick="movePage(-1)">&#8249;</div>
-    <div class="dots" id="dots"></div>
-    <div class="page-counter" id="pageCounter"></div>
-    <div class="arrow hidden" id="arrowRight" onclick="movePage(1)">&#8250;</div>
-    <div class="source">Source: Platts / ICIS (AI Summarized)</div>
-  </div>
-</div>
+  <footer class="ftr">
+    <div class="ftr-left">Created by JS Kim of LAM (첨단구매1팀)</div>
+    <div class="ftr-right">© 2026 Lotte Chemical Advanced Materials</div>
+  </footer>
 
-<footer class="ftr">
-  <div class="ftr-left">Created by JS Kim of LAM (첨단구매1팀)</div>
-  <div class="ftr-right">© 2026 Lotte Chemical Advanced Materials</div>
-</footer>
+  <script>
+    let listData = {};
+    let curDate = '';
+    let curLabel = '';
+    let curPdf = '';
 
-<script>
-let listData={}, curDate='', curLabel='', curPage=0, curImages=[];
-let isDragging=false, startX=0, diffX=0;
+    async function init() {
+      try {
+        const res = await fetch('pdfs/list.json?t=' + Date.now());
+        if (!res.ok) throw new Error('pdfs/list.json 로드 실패');
+        listData = await res.json();
 
-async function init() {
-  try {
-    const res = await fetch('images/list.json?t=' + Date.now());
-    if (!res.ok) throw new Error('list.json 로드 실패');
-    listData = await res.json();
-    buildDateSelect();
+        buildDateSelect();
 
-    const dates = Object.keys(listData);
-    if (dates.length > 0) {
-      // ★ 수정: dates[0] → 마지막 요소(가장 최신 날짜) 자동 선택
-      // GAS가 list.json을 날짜 오름차순으로 생성한다고 가정하면
-      // 배열의 마지막 항목이 가장 최신 날짜임
-      const latestDate = dates[dates.length - 1];
-      onDateChange(latestDate);
-      document.getElementById('dateSelect').value = latestDate;
+        const dates = Object.keys(listData);
+        if (dates.length > 0) {
+          const latestDate = dates[dates.length - 1];
+          document.getElementById('dateSelect').value = latestDate;
+          onDateChange(latestDate);
+        } else {
+          showEmpty('등록된 PDF가 없습니다');
+        }
+      } catch (e) {
+        console.error(e);
+        showEmpty('pdfs/list.json을 찾을 수 없습니다');
+      } finally {
+        document.getElementById('loading').classList.add('hidden');
+      }
     }
-  } catch(e) {
-    console.error(e);
-    showEmpty('list.json을 찾을 수 없습니다');
-  } finally {
-    document.getElementById('loading').classList.add('hidden');
-  }
-}
 
-function buildDateSelect() {
-  const sel = document.getElementById('dateSelect');
-  sel.innerHTML = '<option value="">날짜 선택</option>';
+    function buildDateSelect() {
+      const sel = document.getElementById('dateSelect');
+      sel.innerHTML = '<option value="">날짜 선택</option>';
 
-  // ★ 수정: 날짜 목록을 reverse()해서 최신 날짜가 드롭다운 상단에 표시되도록
-  // 원본 listData 키 순서는 유지하고 표시용 배열만 뒤집음
-  const dates = Object.keys(listData).slice().reverse();
-  dates.forEach(d => {
-    const o = document.createElement('option');
-    o.value = d;
-    o.textContent = formatDate(d);
-    sel.appendChild(o);
-  });
-}
+      const dates = Object.keys(listData).slice().reverse();
+      dates.forEach(d => {
+        const o = document.createElement('option');
+        o.value = d;
+        o.textContent = formatDate(d);
+        sel.appendChild(o);
+      });
+    }
 
-function onDateChange(date) {
-  if (!date || !listData[date]) return;
-  curDate = date;
-  buildLabelSelect(Object.keys(listData[date]));
-  const labels = Object.keys(listData[date]);
-  if (labels.length > 0) {
-    document.getElementById('labelSelect').value = labels[0];
-    selectLabel(labels[0]);
-  }
-}
+    function onDateChange(date) {
+      if (!date || !listData[date]) {
+        resetViewer('해당 날짜 데이터가 없습니다');
+        return;
+      }
 
-// 라벨 드롭다운: 파일 이름 몇 개든 UI 깨지지 않음
-function buildLabelSelect(labels) {
-  const sel = document.getElementById('labelSelect');
-  sel.innerHTML = '<option value="">분류 선택</option>';
-  labels.forEach(l => {
-    const o = document.createElement('option');
-    o.value = l;
-    o.textContent = l;
-    sel.appendChild(o);
-  });
-}
+      curDate = date;
+      const labels = Object.keys(listData[date]);
+      buildLabelSelect(labels);
 
-function selectLabel(label) {
-  if (!label) return;
-  curLabel = label;
-  curPage = 0;
-  curImages = (listData[curDate] && listData[curDate][label]) || [];
-  renderSlides();
-}
+      if (labels.length > 0) {
+        document.getElementById('labelSelect').value = labels[0];
+        selectLabel(labels[0]);
+      } else {
+        resetViewer('해당 날짜에 등록된 PDF가 없습니다');
+      }
+    }
 
-function renderSlides() {
-  const track = document.getElementById('slideTrack');
-  const empty = document.getElementById('emptyState');
-  track.innerHTML = '';
-  if (curImages.length === 0) {
-    track.style.display = 'none';
-    empty.style.display = 'flex';
-    document.getElementById('dots').innerHTML = '';
-    document.getElementById('pageCounter').textContent = '';
-    updateArrows();
-    return;
-  }
-  track.style.display = 'flex';
-  empty.style.display = 'none';
-  curImages.forEach((fn, idx) => {
-    const item = document.createElement('div');
-    item.className = 'slide-item';
-    const img = document.createElement('img');
-    img.src = `images/archive/${fn}`;
-    img.alt = `슬라이드 ${idx+1}`;
-    img.loading = idx === 0 ? 'eager' : 'lazy';
-    item.appendChild(img);
-    track.appendChild(item);
-  });
-  goToPage(0, false);
-  buildDots();
-}
+    function buildLabelSelect(labels) {
+      const sel = document.getElementById('labelSelect');
+      sel.innerHTML = '<option value="">분류 선택</option>';
 
-function movePage(delta) {
-  if (curImages.length === 0) return;
-  goToPage((curPage + delta + curImages.length) % curImages.length, true);
-}
+      labels.forEach(label => {
+        const o = document.createElement('option');
+        o.value = label;
+        o.textContent = label;
+        sel.appendChild(o);
+      });
+    }
 
-function goToPage(idx, animate) {
-  curPage = idx;
-  const track = document.getElementById('slideTrack');
-  track.style.transition = animate ? 'transform 0.35s cubic-bezier(.4,0,.2,1)' : 'none';
-  track.style.transform  = `translateX(-${idx * 100}%)`;
-  updateArrows();
-  updateDots();
-  updateCounter();
-}
+    function selectLabel(label) {
+      if (!label || !curDate || !listData[curDate]) {
+        resetViewer('PDF를 선택할 수 없습니다');
+        return;
+      }
 
-function updateArrows() {
-  // 순환이므로 이미지 있으면 항상 표시
-  document.getElementById('arrowLeft').classList.toggle('hidden',  curImages.length === 0);
-  document.getElementById('arrowRight').classList.toggle('hidden', curImages.length === 0);
-}
+      curLabel = label;
+      const fileName = listData[curDate][label];
 
-function buildDots() {
-  const c = document.getElementById('dots');
-  c.innerHTML = '';
-  curImages.forEach((_, i) => {
-    const d = document.createElement('div');
-    d.className = 'dot' + (i === curPage ? ' active' : '');
-    d.onclick = () => goToPage(i, true);
-    c.appendChild(d);
-  });
-}
+      if (!fileName) {
+        resetViewer('선택한 분류의 PDF가 없습니다');
+        return;
+      }
 
-function updateDots() {
-  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === curPage));
-}
+      curPdf = `pdfs/${fileName}`;
+      renderPdf(curPdf, fileName);
+    }
 
-function updateCounter() {
-  document.getElementById('pageCounter').textContent =
-    curImages.length > 0 ? `${curPage+1} / ${curImages.length}` : '';
-}
+    function renderPdf(pdfPath, fileName) {
+      const viewer = document.getElementById('pdfViewer');
+      const empty = document.getElementById('emptyState');
+      const openBtn = document.getElementById('openBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const fileNameBox = document.getElementById('fileName');
 
-function showEmpty(msg) {
-  const e = document.getElementById('emptyState');
-  e.querySelector('.msg').textContent = msg;
-  e.style.display = 'flex';
-  document.getElementById('slideTrack').style.display = 'none';
-}
+      viewer.src = pdfPath + '#view=FitH';
+      viewer.style.display = 'block';
+      empty.style.display = 'none';
 
-function formatDate(d) {
-  // YYMMDD 형식 → 20YY/MM/DD 로 변환
-  return d.length === 6
-    ? `20${d.slice(0,2)}/${d.slice(2,4)}/${d.slice(4,6)}`
-    : d;
-}
+      openBtn.href = pdfPath;
+      downloadBtn.href = pdfPath;
+      openBtn.classList.remove('disabled');
+      downloadBtn.classList.remove('disabled');
 
-// ── 터치 스와이프 ─────────────────────────────
-const frame = document.getElementById('slideFrame');
-frame.addEventListener('touchstart', e => {
-  startX = e.touches[0].clientX; diffX = 0; isDragging = true;
-}, {passive:true});
-frame.addEventListener('touchmove', e => {
-  if (!isDragging) return;
-  diffX = e.touches[0].clientX - startX;
-  const t = document.getElementById('slideTrack');
-  t.style.transition = 'none';
-  t.style.transform = `translateX(calc(-${curPage*100}% + ${diffX}px))`;
-}, {passive:true});
-frame.addEventListener('touchend', () => {
-  if (!isDragging) return;
-  isDragging = false;
-  const thr = frame.offsetWidth * 0.2;
-  if (diffX < -thr) movePage(1);
-  else if (diffX > thr) movePage(-1);
-  else goToPage(curPage, true);
-});
+      fileNameBox.textContent = fileName;
+    }
 
-// ── 마우스 드래그 ─────────────────────────────
-frame.addEventListener('mousedown', e => {
-  startX = e.clientX; diffX = 0; isDragging = true; frame.style.cursor = 'grabbing';
-});
-document.addEventListener('mousemove', e => {
-  if (!isDragging) return;
-  diffX = e.clientX - startX;
-  const t = document.getElementById('slideTrack');
-  t.style.transition = 'none';
-  t.style.transform = `translateX(calc(-${curPage*100}% + ${diffX}px))`;
-});
-document.addEventListener('mouseup', () => {
-  if (!isDragging) return;
-  isDragging = false;
-  frame.style.cursor = '';
-  const thr = frame.offsetWidth * 0.15;
-  if (diffX < -thr) movePage(1);
-  else if (diffX > thr) movePage(-1);
-  else goToPage(curPage, true);
-});
+    function resetViewer(message = '선택된 파일 없음') {
+      curPdf = '';
 
-// ── 키보드 ───────────────────────────────────
-document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowLeft')  movePage(-1);
-  if (e.key === 'ArrowRight') movePage(1);
-});
+      const viewer = document.getElementById('pdfViewer');
+      const empty = document.getElementById('emptyState');
+      const msg = empty.querySelector('.msg');
+      const openBtn = document.getElementById('openBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const fileNameBox = document.getElementById('fileName');
 
-init();
-</script>
+      viewer.removeAttribute('src');
+      viewer.style.display = 'none';
+
+      msg.textContent = message;
+      empty.style.display = 'flex';
+
+      openBtn.href = '#';
+      downloadBtn.href = '#';
+      openBtn.classList.add('disabled');
+      downloadBtn.classList.add('disabled');
+
+      fileNameBox.textContent = '선택된 파일 없음';
+    }
+
+    function showEmpty(message) {
+      const viewer = document.getElementById('pdfViewer');
+      const empty = document.getElementById('emptyState');
+      viewer.style.display = 'none';
+      empty.style.display = 'flex';
+      empty.querySelector('.msg').textContent = message;
+      document.getElementById('fileName').textContent = '선택된 파일 없음';
+    }
+
+    function formatDate(d) {
+      return d.length === 6
+        ? `20${d.slice(0,2)}/${d.slice(2,4)}/${d.slice(4,6)}`
+        : d;
+    }
+
+    init();
+  </script>
 </body>
 </html>
