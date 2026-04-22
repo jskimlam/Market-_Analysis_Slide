@@ -10,21 +10,21 @@
   <style>
     :root {
       --orange: #FF8C00;
-      --red:    #D93025;
-      --black:  #000000;
-      --white:  #FFFFFF;
-      --bg:     #F0F0EE;
-      --gray1:  #1A1A1A;
-      --gray2:  #444444;
-      --gray3:  #888888;
+      --red: #D93025;
+      --black: #000000;
+      --white: #FFFFFF;
+      --bg: #F0F0EE;
+      --gray1: #1A1A1A;
+      --gray2: #444444;
+      --gray3: #888888;
       --border: 2px solid var(--black);
       --shadow: 4px 4px 0px var(--black);
-      --mono:   'DM Mono', monospace;
-      --disp:   'Montserrat', sans-serif;
-      --sans:   'Noto Sans KR', sans-serif;
+      --mono: 'DM Mono', monospace;
+      --disp: 'Montserrat', sans-serif;
+      --sans: 'Noto Sans KR', sans-serif;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
 
     body {
@@ -41,7 +41,7 @@
       background: var(--white);
       border-bottom: var(--border);
       padding: 0 24px;
-      height: 64px;
+      min-height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -74,6 +74,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      min-width: 0;
     }
 
     .brand-title {
@@ -84,20 +85,18 @@
       white-space: nowrap;
     }
 
-    .brand-title span {
-      color: var(--red);
-    }
+    .brand-title span { color: var(--red); }
 
     .hdr-right {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-shrink: 0;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
-    .sel-wrap {
-      position: relative;
-    }
+    .sel-wrap { position: relative; }
 
     .sel-wrap select {
       appearance: none;
@@ -111,12 +110,12 @@
       padding: 7px 32px 7px 12px;
       cursor: pointer;
       outline: none;
-      min-width: 120px;
+      min-width: 130px;
       transition: box-shadow .1s;
     }
 
     .sel-wrap select:focus {
-      box-shadow: 6px 6px 0px var(--black);
+      box-shadow: 6px 6px 0 var(--black);
     }
 
     .sel-wrap::after {
@@ -154,16 +153,35 @@
       background: var(--white);
       border: var(--border);
       box-shadow: var(--shadow);
-      overflow: hidden;
+      overflow: auto;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      touch-action: pan-y;
+    }
+
+    .canvas-wrap {
+      width: 100%;
+      height: 100%;
+      display: none;
+      align-items: center;
+      justify-content: center;
       min-height: 0;
     }
 
-    .pdf-viewer {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: none;
-      background: #f7f7f7;
+    #pdfCanvas {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      background: #fff;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
     .empty-state {
@@ -219,6 +237,7 @@
       align-items: center;
       justify-content: center;
       min-height: 38px;
+      min-width: 44px;
     }
 
     .btn:hover {
@@ -235,6 +254,15 @@
       pointer-events: none;
     }
 
+    .page-indicator {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gray2);
+      min-width: 64px;
+      text-align: center;
+    }
+
     .file-name {
       font-family: var(--mono);
       font-size: 12px;
@@ -247,6 +275,14 @@
       font-size: 10px;
       color: var(--gray3);
       font-style: italic;
+    }
+
+    .zoom-info {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--gray2);
+      min-width: 52px;
+      text-align: center;
     }
 
     .ftr {
@@ -274,7 +310,7 @@
     #loading {
       position: fixed;
       inset: 0;
-      background: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.88);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -285,9 +321,7 @@
       gap: 10px;
     }
 
-    #loading.hidden {
-      display: none;
-    }
+    #loading.hidden { display: none; }
 
     .spin {
       width: 20px;
@@ -302,7 +336,7 @@
       to { transform: rotate(360deg); }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       .hdr {
         height: auto;
         flex-wrap: wrap;
@@ -327,23 +361,33 @@
         padding: 10px 10px 8px;
       }
 
+      .viewer-frame {
+        padding: 8px;
+      }
+
       .toolbar {
         flex-direction: column;
         align-items: stretch;
       }
 
-      .toolbar-left, .toolbar-right {
+      .toolbar-left,
+      .toolbar-right {
         justify-content: center;
       }
 
       .btn {
-        width: 100%;
+        min-width: 0;
       }
 
       .ftr {
         flex-direction: column;
         gap: 4px;
         text-align: center;
+      }
+
+      #pdfCanvas {
+        max-width: 100%;
+        height: auto;
       }
     }
   </style>
@@ -366,13 +410,13 @@
 
     <div class="hdr-right">
       <div class="sel-wrap">
-        <select id="dateSelect" onchange="onDateChange(this.value)">
+        <select id="dateSelect">
           <option value="">날짜 선택</option>
         </select>
       </div>
 
       <div class="sel-wrap">
-        <select id="labelSelect" onchange="selectLabel(this.value)">
+        <select id="labelSelect">
           <option value="">분류 선택</option>
         </select>
       </div>
@@ -382,8 +426,10 @@
   </header>
 
   <div class="main-wrap">
-    <div class="viewer-frame">
-      <iframe id="pdfViewer" class="pdf-viewer"></iframe>
+    <div class="viewer-frame" id="viewerFrame">
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="pdfCanvas"></canvas>
+      </div>
 
       <div class="empty-state" id="emptyState">
         <div class="big">📄</div>
@@ -393,11 +439,18 @@
 
     <div class="toolbar">
       <div class="toolbar-left">
-        <a id="openBtn" class="btn disabled" href="#" target="_blank" rel="noopener noreferrer">새 창에서 열기</a>
-        <a id="downloadBtn" class="btn disabled" href="#" target="_blank" rel="noopener noreferrer">PDF 열기</a>
+        <button class="btn disabled" id="prevBtn" type="button">‹ 이전</button>
+        <div class="page-indicator" id="pageIndicator">0 / 0</div>
+        <button class="btn disabled" id="nextBtn" type="button">다음 ›</button>
+
+        <button class="btn disabled" id="zoomOutBtn" type="button">－</button>
+        <div class="zoom-info" id="zoomInfo">100%</div>
+        <button class="btn disabled" id="zoomInBtn" type="button">＋</button>
+        <button class="btn disabled" id="fitBtn" type="button">맞춤</button>
       </div>
 
       <div class="toolbar-right">
+        <a id="openBtn" class="btn disabled" href="#" target="_blank" rel="noopener noreferrer">PDF 열기</a>
         <div class="file-name" id="fileName">선택된 파일 없음</div>
         <div class="source">Source: PDF Archive</div>
       </div>
@@ -409,50 +462,164 @@
     <div class="ftr-right">© 2026 Lotte Chemical Advanced Materials</div>
   </footer>
 
-  <script>
+  <script type="module">
+    import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs';
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
+
     let listData = {};
     let curDate = '';
     let curLabel = '';
-    let curPdf = '';
+    let curPdfPath = '';
+    let pdfDoc = null;
+    let currentPage = 1;
+    let totalPages = 0;
+    let zoomScale = 1;
+    let isRendering = false;
+    let pendingPage = null;
+
+    const loadingEl = document.getElementById('loading');
+    const dateSelect = document.getElementById('dateSelect');
+    const labelSelect = document.getElementById('labelSelect');
+    const emptyState = document.getElementById('emptyState');
+    const canvasWrap = document.getElementById('canvasWrap');
+    const canvas = document.getElementById('pdfCanvas');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    const viewerFrame = document.getElementById('viewerFrame');
+
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const zoomOutBtn = document.getElementById('zoomOutBtn');
+    const zoomInBtn = document.getElementById('zoomInBtn');
+    const fitBtn = document.getElementById('fitBtn');
+    const openBtn = document.getElementById('openBtn');
+
+    const pageIndicator = document.getElementById('pageIndicator');
+    const zoomInfo = document.getElementById('zoomInfo');
+    const fileNameEl = document.getElementById('fileName');
+
+    let touchStartX = 0;
+    let touchDiffX = 0;
+    let isTouching = false;
 
     async function init() {
+      bindEvents();
+
       try {
         const res = await fetch('pdfs/list.json?t=' + Date.now());
         if (!res.ok) throw new Error('pdfs/list.json 로드 실패');
-        listData = await res.json();
 
+        listData = await res.json();
         buildDateSelect();
 
         const dates = Object.keys(listData);
         if (dates.length > 0) {
           const latestDate = dates[dates.length - 1];
-          document.getElementById('dateSelect').value = latestDate;
-          onDateChange(latestDate);
+          dateSelect.value = latestDate;
+          await onDateChange(latestDate);
         } else {
           showEmpty('등록된 PDF가 없습니다');
         }
-      } catch (e) {
-        console.error(e);
-        showEmpty('pdfs/list.json을 찾을 수 없습니다');
+      } catch (err) {
+        console.error(err);
+        showEmpty('pdfs/list.json을 불러오지 못했습니다');
       } finally {
-        document.getElementById('loading').classList.add('hidden');
+        loadingEl.classList.add('hidden');
       }
     }
 
+    function bindEvents() {
+      dateSelect.addEventListener('change', async (e) => {
+        await onDateChange(e.target.value);
+      });
+
+      labelSelect.addEventListener('change', async (e) => {
+        await selectLabel(e.target.value);
+      });
+
+      prevBtn.addEventListener('click', () => goToPrevPage());
+      nextBtn.addEventListener('click', () => goToNextPage());
+      zoomOutBtn.addEventListener('click', () => changeZoom(-0.1));
+      zoomInBtn.addEventListener('click', () => changeZoom(0.1));
+      fitBtn.addEventListener('click', async () => {
+        if (!pdfDoc) return;
+        zoomScale = getFitScale();
+        await renderPage(currentPage);
+      });
+
+      document.addEventListener('keydown', async (e) => {
+        if (!pdfDoc) return;
+
+        if (e.key === 'ArrowLeft') {
+          goToPrevPage();
+        } else if (e.key === 'ArrowRight') {
+          goToNextPage();
+        } else if (e.key === '+' || e.key === '=') {
+          changeZoom(0.1);
+        } else if (e.key === '-') {
+          changeZoom(-0.1);
+        }
+      });
+
+      viewerFrame.addEventListener('touchstart', (e) => {
+        if (!pdfDoc) return;
+        touchStartX = e.touches[0].clientX;
+        touchDiffX = 0;
+        isTouching = true;
+      }, { passive: true });
+
+      viewerFrame.addEventListener('touchmove', (e) => {
+        if (!isTouching) return;
+        touchDiffX = e.touches[0].clientX - touchStartX;
+      }, { passive: true });
+
+      viewerFrame.addEventListener('touchend', () => {
+        if (!isTouching) return;
+        isTouching = false;
+
+        const threshold = Math.max(60, viewerFrame.clientWidth * 0.15);
+        if (touchDiffX <= -threshold) {
+          goToNextPage();
+        } else if (touchDiffX >= threshold) {
+          goToPrevPage();
+        }
+      });
+
+      window.addEventListener('resize', debounce(async () => {
+        if (!pdfDoc) return;
+        const fitScale = getFitScale();
+        if (Math.abs(zoomScale - fitScale) < 0.08) {
+          zoomScale = fitScale;
+          await renderPage(currentPage);
+        }
+      }, 150));
+    }
+
     function buildDateSelect() {
-      const sel = document.getElementById('dateSelect');
-      sel.innerHTML = '<option value="">날짜 선택</option>';
+      dateSelect.innerHTML = '<option value="">날짜 선택</option>';
 
       const dates = Object.keys(listData).slice().reverse();
-      dates.forEach(d => {
-        const o = document.createElement('option');
-        o.value = d;
-        o.textContent = formatDate(d);
-        sel.appendChild(o);
+      dates.forEach(date => {
+        const option = document.createElement('option');
+        option.value = date;
+        option.textContent = formatDate(date);
+        dateSelect.appendChild(option);
       });
     }
 
-    function onDateChange(date) {
+    function buildLabelSelect(labels) {
+      labelSelect.innerHTML = '<option value="">분류 선택</option>';
+
+      labels.forEach(label => {
+        const option = document.createElement('option');
+        option.value = label;
+        option.textContent = label;
+        labelSelect.appendChild(option);
+      });
+    }
+
+    async function onDateChange(date) {
       if (!date || !listData[date]) {
         resetViewer('해당 날짜 데이터가 없습니다');
         return;
@@ -463,26 +630,14 @@
       buildLabelSelect(labels);
 
       if (labels.length > 0) {
-        document.getElementById('labelSelect').value = labels[0];
-        selectLabel(labels[0]);
+        labelSelect.value = labels[0];
+        await selectLabel(labels[0]);
       } else {
         resetViewer('해당 날짜에 등록된 PDF가 없습니다');
       }
     }
 
-    function buildLabelSelect(labels) {
-      const sel = document.getElementById('labelSelect');
-      sel.innerHTML = '<option value="">분류 선택</option>';
-
-      labels.forEach(label => {
-        const o = document.createElement('option');
-        o.value = label;
-        o.textContent = label;
-        sel.appendChild(o);
-      });
-    }
-
-    function selectLabel(label) {
+    async function selectLabel(label) {
       if (!label || !curDate || !listData[curDate]) {
         resetViewer('PDF를 선택할 수 없습니다');
         return;
@@ -496,67 +651,287 @@
         return;
       }
 
-      curPdf = `pdfs/${fileName}`;
-      renderPdf(curPdf, fileName);
+      curPdfPath = `pdfs/${fileName}`;
+      fileNameEl.textContent = fileName;
+      openBtn.href = curPdfPath;
+      openBtn.classList.remove('disabled');
+
+      await loadPdf(curPdfPath);
     }
 
-    function renderPdf(pdfPath, fileName) {
-      const viewer = document.getElementById('pdfViewer');
-      const empty = document.getElementById('emptyState');
-      const openBtn = document.getElementById('openBtn');
-      const downloadBtn = document.getElementById('downloadBtn');
-      const fileNameBox = document.getElementById('fileName');
+    async function loadPdf(pdfPath) {
+      try {
+        showLoading('PDF 로딩 중...');
 
-      viewer.src = pdfPath + '#view=FitH';
-      viewer.style.display = 'block';
-      empty.style.display = 'none';
+        pdfDoc = null;
+        currentPage = 1;
+        totalPages = 0;
+        updatePageIndicator();
+        enableControls(false);
 
-      openBtn.href = pdfPath;
-      downloadBtn.href = pdfPath;
-      openBtn.classList.remove('disabled');
-      downloadBtn.classList.remove('disabled');
+        const task = pdfjsLib.getDocument(pdfPath);
+        pdfDoc = await task.promise;
+        totalPages = pdfDoc.numPages;
 
-      fileNameBox.textContent = fileName;
+        emptyState.style.display = 'none';
+        canvasWrap.style.display = 'flex';
+
+        zoomScale = getFitScale();
+        await renderPage(1);
+        enableControls(true);
+      } catch (err) {
+        console.error(err);
+        resetViewer('PDF를 불러오지 못했습니다');
+      } finally {
+        hideLoading();
+      }
+    }
+
+    async function renderPage(pageNum) {
+      if (!pdfDoc) return;
+
+      if (isRendering) {
+        pendingPage = pageNum;
+        return;
+      }
+
+      isRendering = true;
+
+      try {
+        const page = await pdfDoc.getPage(pageNum);
+        const viewport = page.getViewport({ scale: zoomScale });
+
+        const outputScale = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.floor(viewport.width * outputScale);
+        canvas.height = Math.floor(viewport.height * outputScale);
+        canvas.style.width = `${Math.floor(viewport.width)}px`;
+        canvas.style.height = `${Math.floor(viewport.height)}px`;
+
+        const renderContext = {
+          canvasContext: ctx,
+          viewport,
+          transform: outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null
+        };
+
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        await page.render(renderContext).promise;
+
+        currentPage = pageNum;
+        updatePageIndicator();
+        updateZoomInfo();
+        updateButtonStates();
+      } catch (err) {
+        console.error(err);
+      } finally {
+        isRendering = false;
+
+        if (pendingPage !== null) {
+          const nextPage = pendingPage;
+          pendingPage = null;
+          renderPage(nextPage);
+        }
+      }
+    }
+
+    function getFitScale() {
+      if (!pdfDoc) return 1;
+
+      const availableWidth = Math.max(300, viewerFrame.clientWidth - 32);
+      return pdfDoc.getPage(1).then
+        ? 1
+        : 1;
+    }
+
+    async function calculateFitScale() {
+      if (!pdfDoc) return 1;
+
+      const page = await pdfDoc.getPage(currentPage || 1);
+      const baseViewport = page.getViewport({ scale: 1 });
+
+      const availableWidth = Math.max(280, viewerFrame.clientWidth - 32);
+      const availableHeight = Math.max(280, viewerFrame.clientHeight - 32);
+
+      const widthScale = availableWidth / baseViewport.width;
+      const heightScale = availableHeight / baseViewport.height;
+
+      return Math.min(widthScale, heightScale);
+    }
+
+    async function goToPrevPage() {
+      if (!pdfDoc || currentPage <= 1) return;
+      await renderPage(currentPage - 1);
+    }
+
+    async function goToNextPage() {
+      if (!pdfDoc || currentPage >= totalPages) return;
+      await renderPage(currentPage + 1);
+    }
+
+    async function changeZoom(delta) {
+      if (!pdfDoc) return;
+
+      const next = Math.min(3, Math.max(0.5, +(zoomScale + delta).toFixed(2)));
+      if (next === zoomScale) return;
+
+      zoomScale = next;
+      await renderPage(currentPage);
+    }
+
+    function updatePageIndicator() {
+      pageIndicator.textContent = `${currentPage} / ${totalPages}`;
+    }
+
+    function updateZoomInfo() {
+      zoomInfo.textContent = `${Math.round(zoomScale * 100)}%`;
+    }
+
+    function updateButtonStates() {
+      setButtonState(prevBtn, !(pdfDoc && currentPage > 1));
+      setButtonState(nextBtn, !(pdfDoc && currentPage < totalPages));
+      setButtonState(zoomOutBtn, !pdfDoc);
+      setButtonState(zoomInBtn, !pdfDoc);
+      setButtonState(fitBtn, !pdfDoc);
+    }
+
+    function enableControls(enabled) {
+      setButtonState(prevBtn, !enabled);
+      setButtonState(nextBtn, !enabled);
+      setButtonState(zoomOutBtn, !enabled);
+      setButtonState(zoomInBtn, !enabled);
+      setButtonState(fitBtn, !enabled);
+
+      if (!enabled) {
+        openBtn.classList.add('disabled');
+      } else if (curPdfPath) {
+        openBtn.classList.remove('disabled');
+      }
+
+      updateZoomInfo();
+      updateButtonStates();
+    }
+
+    function setButtonState(button, disabled) {
+      button.disabled = disabled;
+      button.classList.toggle('disabled', disabled);
     }
 
     function resetViewer(message = '선택된 파일 없음') {
-      curPdf = '';
+      pdfDoc = null;
+      currentPage = 0;
+      totalPages = 0;
+      zoomScale = 1;
+      curPdfPath = '';
 
-      const viewer = document.getElementById('pdfViewer');
-      const empty = document.getElementById('emptyState');
-      const msg = empty.querySelector('.msg');
-      const openBtn = document.getElementById('openBtn');
-      const downloadBtn = document.getElementById('downloadBtn');
-      const fileNameBox = document.getElementById('fileName');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.width = 0;
+      canvas.height = 0;
 
-      viewer.removeAttribute('src');
-      viewer.style.display = 'none';
+      canvasWrap.style.display = 'none';
+      emptyState.style.display = 'flex';
+      emptyState.querySelector('.msg').textContent = message;
 
-      msg.textContent = message;
-      empty.style.display = 'flex';
+      fileNameEl.textContent = '선택된 파일 없음';
+      pageIndicator.textContent = '0 / 0';
+      zoomInfo.textContent = '100%';
 
       openBtn.href = '#';
-      downloadBtn.href = '#';
       openBtn.classList.add('disabled');
-      downloadBtn.classList.add('disabled');
 
-      fileNameBox.textContent = '선택된 파일 없음';
+      enableControls(false);
     }
 
     function showEmpty(message) {
-      const viewer = document.getElementById('pdfViewer');
-      const empty = document.getElementById('emptyState');
-      viewer.style.display = 'none';
-      empty.style.display = 'flex';
-      empty.querySelector('.msg').textContent = message;
-      document.getElementById('fileName').textContent = '선택된 파일 없음';
+      resetViewer(message);
+    }
+
+    function showLoading(message = '로딩 중...') {
+      loadingEl.innerHTML = `<div class="spin"></div>${message}`;
+      loadingEl.classList.remove('hidden');
+    }
+
+    function hideLoading() {
+      loadingEl.classList.add('hidden');
+      loadingEl.innerHTML = `<div class="spin"></div>데이터 로딩 중...`;
     }
 
     function formatDate(d) {
       return d.length === 6
-        ? `20${d.slice(0,2)}/${d.slice(2,4)}/${d.slice(4,6)}`
+        ? `20${d.slice(0, 2)}/${d.slice(2, 4)}/${d.slice(4, 6)}`
         : d;
     }
+
+    function debounce(fn, delay = 100) {
+      let timer = null;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+      };
+    }
+
+    async function initFitAware() {
+      const originalCalculateFitScale = calculateFitScale;
+      window.getFitScale = function() {};
+      getFitScale = async () => await originalCalculateFitScale();
+    }
+
+    let _fitScaleReady = false;
+    let _getFitScaleInternal = null;
+
+    _getFitScaleInternal = async function () {
+      if (!pdfDoc) return 1;
+      return await calculateFitScale();
+    };
+
+    getFitScale = function () {
+      console.warn('Deprecated direct getFitScale call');
+      return 1;
+    };
+
+    const originalLoadPdf = loadPdf;
+    loadPdf = async function(pdfPath) {
+      try {
+        showLoading('PDF 로딩 중...');
+
+        pdfDoc = null;
+        currentPage = 1;
+        totalPages = 0;
+        updatePageIndicator();
+        enableControls(false);
+
+        const task = pdfjsLib.getDocument(pdfPath);
+        pdfDoc = await task.promise;
+        totalPages = pdfDoc.numPages;
+
+        emptyState.style.display = 'none';
+        canvasWrap.style.display = 'flex';
+
+        zoomScale = await _getFitScaleInternal();
+        await renderPage(1);
+        enableControls(true);
+      } catch (err) {
+        console.error(err);
+        resetViewer('PDF를 불러오지 못했습니다');
+      } finally {
+        hideLoading();
+      }
+    };
+
+    fitBtn.addEventListener('click', async () => {
+      if (!pdfDoc) return;
+      zoomScale = await _getFitScaleInternal();
+      await renderPage(currentPage);
+    });
+
+    window.addEventListener('resize', debounce(async () => {
+      if (!pdfDoc) return;
+      const fitScale = await _getFitScaleInternal();
+      if (Math.abs(zoomScale - fitScale) < 0.08) {
+        zoomScale = fitScale;
+        await renderPage(currentPage);
+      }
+    }, 150));
 
     init();
   </script>
